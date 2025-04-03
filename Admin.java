@@ -33,5 +33,76 @@ public class Admin {
         return spaces;
     }
 
+    public void addSpace() {
+        Admin admin = new Admin(spaces);
+        System.out.println("Enter the id of the coworking space:");
+        int id = sc.nextInt();
+        System.out.println("Enter the type of the coworking space:");
+        String type = sc.next();
+        System.out.println("Enter the price of the coworking space:");
+        double price = sc.nextDouble();
+        System.out.println("Enter the availability of the coworking space:");
+        boolean availability = sc.nextBoolean();
+        spaces = admin.add(id, type, price, availability);
+        System.out.println("The coworking space added successfully!");
+    }
+
+    public void removeSpace() {
+        if (spaces.isEmpty()) {
+            System.out.println("The list of coworking spaces is empty!");
+        } else {
+            Admin admin = new Admin(spaces);
+            System.out.println("Enter the id of the space:");
+            int id = sc.nextInt();
+            boolean removingSpace = false;
+            for (Space space : spaces) {
+                if (space.getId() == id) {
+                    spaces = admin.remove(id);
+                    System.out.println("Coworking space was removed!");
+                    removingSpace = true;
+                    break;
+                }
+            }
+            if (!removingSpace)
+                System.out.println("Space with this ID does not exist!");
+        }
+    }
+
+    public void updateSpace() {
+        if (spaces.isEmpty()) {
+            System.out.println("The list of coworking spaces is empty!");
+        } else {
+            Admin admin = new Admin(spaces);
+            System.out.println("Enter the id of the space you would like to update:");
+            int id = sc.nextInt();
+            boolean updatingSpace = false;
+            for (Space space : spaces) {
+                if (space.getId() == id) {
+                    System.out.println("Enter a new type for the space:");
+                    String newType = sc.next();
+                    System.out.println("Enter a new price for the space:");
+                    double newPrice = sc.nextDouble();
+                    System.out.println("Enter a new availability for the space:");
+                    boolean newAvailability = sc.nextBoolean();
+                    spaces = admin.update(id, newType, newPrice, newAvailability);
+                    System.out.println("The space updated successfully!");
+                    updatingSpace = true;
+                    break;
+                }
+            }
+            if (!updatingSpace) {
+                System.out.println("Space with this ID does not exist!");
+            }
+        }
+    }
+
+    public void displaySpaces() {
+        if (spaces.isEmpty()) {
+            System.out.println("The list of coworking spaces is empty!");
+        } else {
+            Admin admin = new Admin(spaces);
+            System.out.println(admin.display());
+        }
+    }
 
 }
