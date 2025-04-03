@@ -10,21 +10,23 @@ public class Main {
         spaces.add(new Space(231, "closed", 69.99, false));
         spaces.add(new Space(321, "open", 29.99, true));
         spaces.add(new Space(412, "open", 34.99, false));
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome!");
-        int option = -1;
-        System.out.println("!WARNING!\n \"ID\" is an integer,\n \"Type\" is a String," +
-                "\n \"Price\" is a float number\n \"Availability\" is a boolean(true - free, false - not free)");
+        int option;
         do {
             System.out.println("Choose one of the following options and type it in:");
             System.out.println("1-Admin Login");
             System.out.println("2-Customer Login");
             System.out.println("3-Exit");
-            try {
-                option = sc.nextInt();
-            } catch (Exception e) {
-                System.out.println("Please enter a valid option!");
-                sc.nextLine();
+            while (true) {
+                try {
+                    option = sc.nextInt();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Please enter a valid option!");
+                    sc.nextLine();
+                }
             }
             switch (option) {
                 case 1:
@@ -33,60 +35,32 @@ public class Main {
                     int adminOption;
                     do {
                         System.out.println("Choose an option:");
-                        System.out.println("1-Add reservation");
-                        System.out.println("2-Remove reservation");
-                        System.out.println("3-Display All reservations");
-                        System.out.println("4-Update Coworking Space");
+                        System.out.println("1-Add space");
+                        System.out.println("2-Remove space");
+                        System.out.println("3-Display all spaces");
+                        System.out.println("4-Update Space");
                         System.out.println("5-Exit");
-                        try {
-                            adminOption = sc.nextInt();
-                        } catch (Exception e) {
-                            System.out.println("Please enter a valid option!");
-                            adminOption = 5;
+                        while (true) {
+                            try {
+                                adminOption = sc.nextInt();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("Please enter a valid option!");
+                                sc.nextLine();
+                            }
                         }
                         switch (adminOption) {
                             case 1:
-                                System.out.println("Enter the id of the reservation:");
-                                int id = sc.nextInt();
-                                System.out.println("Enter the type of the coworking space:");
-                                String type = sc.next();
-                                System.out.println("Enter the price of the coworking space:");
-                                double price = sc.nextDouble();
-                                System.out.println("Enter the availability of the coworking space:");
-                                boolean availability = sc.nextBoolean();
-                                spaces = admin.addSpace(id, type, price, availability);
-                                System.out.println("The coworking space added successfully!");
+                                admin.addSpace();
                                 break;
                             case 2:
-                                System.out.println("Enter the id of the space:");
-                                int spaceIdForRemoving = sc.nextInt();
-                                boolean removingSpace = false;
-                                for (Space space : spaces) {
-                                    if (space.getId() == spaceIdForRemoving) {
-                                        spaces = admin.removeSpace(spaceIdForRemoving);
-                                        System.out.println("Coworking space was removed!");
-                                        removingSpace = true;
-                                        break;
-                                    }
-                                }
-                                if (!removingSpace)
-                                    System.out.println("Space with this ID does not exist!");
+                                admin.removeSpace();
                                 break;
                             case 3:
-                                System.out.println("The list of all coworking spaces:");
-                                System.out.println(admin.display());
+                                admin.displaySpaces();
                                 break;
                             case 4:
-                                System.out.println("Enter the id of the space you would like to update:");
-                                int spaceForUpdateId = sc.nextInt();
-                                System.out.println("Enter a new type for the space:");
-                                String newType = sc.next();
-                                System.out.println("Enter a new price for the space:");
-                                double newPrice = sc.nextDouble();
-                                System.out.println("Enter a new availability for the space:");
-                                boolean newAvailability = sc.nextBoolean();
-                                spaces = admin.updateSpace(spaceForUpdateId, newType, newPrice, newAvailability);
-                                System.out.println("The space updated successfully!");
+                                admin.updateSpace();
                                 break;
                             case 5:
                                 System.out.println("You were redirected to the main menu!");
@@ -99,7 +73,7 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("Welcome to Customer menu");
-                    Customer customer = new Customer(spaces);
+                    Customer customer = new Customer(spaces, reservations);
                     int customerOption;
                     do {
                         System.out.println("Choose an option:");
@@ -108,59 +82,27 @@ public class Main {
                         System.out.println("3-View my reservations");
                         System.out.println("4-Cancel reservation");
                         System.out.println("5-Exit");
-                        try {
-                            customerOption = sc.nextInt();
-                        } catch (Exception e) {
-                            System.out.println("Please enter a valid option!");
-                            customerOption = 5;
+                        while (true) {
+                            try {
+                                customerOption = sc.nextInt();
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("Please enter a valid option!");
+                                sc.nextLine();
+                            }
                         }
                         switch (customerOption) {
                             case 1:
-                                System.out.println("The list of available coworking spaces:");
-                                System.out.println(customer.browse());
+                                customer.browseReservations();
                                 break;
                             case 2:
-                                System.out.println("Enter the name of the reservation:");
-                                String name = sc.next();
-                                System.out.println("Enter the start date:");
-                                String startDate = sc.next();
-                                System.out.println("Enter the end date:");
-                                String endDate = sc.next();
-                                System.out.println("Enter the id of the free coworking space:");
-                                int id = sc.nextInt();
-                                boolean reserved = false;
-                                for (Space space : spaces) {
-                                    if (space.getId() == id && space.availability()) {
-                                        reservations = customer.makeReservation(name, startDate, endDate, id);
-                                        spaces = customer.availabilitySpaceChanging(id);
-                                        System.out.println("Reservation made!");
-                                        reserved = true;
-                                        break;
-                                    }
-                                }
-                                if (!reserved) {
-                                    System.out.println("Coworking space with this ID does not exist!");
-                                }
+                                customer.makeReservation();
                                 break;
                             case 3:
-                                customer.viewReservation(reservations);
+                                customer.viewReservation();
                                 break;
                             case 4:
-                                System.out.println("Enter the ID of the reservation you want to delete:");
-                                int removeId = sc.nextInt();
-                                boolean idForRemoving = false;
-                                for (Reservation reservation : reservations) {
-                                    if (reservation.getId() == removeId) {
-                                        customer.cancelReservation(removeId);
-                                        spaces = customer.availabilitySpaceChanging(removeId);
-                                        System.out.println("Reservation removed successfully!");
-                                        idForRemoving = true;
-                                        break;
-                                    }
-                                }
-                                if (!idForRemoving) {
-                                    System.out.println("Reservation with this ID does not exist!");
-                                }
+                                customer.cancelReservation();
                                 break;
                             case 5:
                                 System.out.println("You were redirected to the main menu!");

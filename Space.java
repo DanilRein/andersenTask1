@@ -1,7 +1,7 @@
 public class Space {
-    private int id;
-    private String type;
-    private Double price;
+    private final int id;
+    private final String type;
+    private final Double price;
     private boolean availability;
 
     public Space(int id, String type, Double price, Boolean availability) {
@@ -19,9 +19,8 @@ public class Space {
         return availability;
     }
 
-    public boolean changeAvailability() {
+    public void changeAvailability() {
         availability = !availability;
-        return availability;
     }
 
     public String toString() {

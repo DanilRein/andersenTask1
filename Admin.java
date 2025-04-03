@@ -1,20 +1,21 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Admin {
-    List<Space> spaces = new ArrayList<>();
+    Scanner sc = new Scanner(System.in);
+    List<Space> spaces;
 
     Admin(List<Space> spaces) {
         this.spaces = spaces;
     }
 
 
-    public List<Space> addSpace(int id, String type, double price, boolean availability) {
+    public List<Space> add(int id, String type, double price, boolean availability) {
         this.spaces.add(new Space(id, type, price, availability));
         return spaces;
     }
 
-    public List<Space> removeSpace(int id) {
+    public List<Space> remove(int id) {
         spaces.removeIf(s -> s.getId() == id);
         return spaces;
     }
@@ -24,10 +25,10 @@ public class Admin {
         for (Space s : spaces) {
             str.append(s.toString()).append("\n");
         }
-        return str.toString();
+        return "The list of all coworking spaces:\n" + str;
     }
 
-    public List<Space> updateSpace(int id, String type, double price, boolean availability) {
+    public List<Space> update(int id, String type, double price, boolean availability) {
         spaces.removeIf(s -> s.getId() == id);
         spaces.add(new Space(id, type, price, availability));
         return spaces;
