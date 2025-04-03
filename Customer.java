@@ -1,11 +1,10 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Customer {
     Scanner sc = new Scanner(System.in);
     private List<Space> spaces;
-    private List<Reservation> reservations = new ArrayList<>();
+    private List<Reservation> reservations;
 
     Customer(List<Space> spaceList, List<Reservation> reservationList) {
         this.spaces = spaceList;
