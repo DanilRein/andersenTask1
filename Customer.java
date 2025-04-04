@@ -3,15 +3,15 @@ import java.util.Scanner;
 
 public class Customer {
     Scanner sc = new Scanner(System.in);
-    private List<Space> spaces;
-    private List<Reservation> reservations;
+    private static List<Space> spaces;
+    private static List<Reservation> reservations;
 
     Customer(List<Space> spaceList, List<Reservation> reservationList) {
-        this.spaces = spaceList;
-        this.reservations = reservationList;
+        Customer.spaces = spaceList;
+        Customer.reservations = reservationList;
     }
 
-    public String browse() {
+    private static String browse() {
         StringBuilder str = new StringBuilder();
         for (Space space : spaces) {
             if (space.availability())
@@ -21,15 +21,14 @@ public class Customer {
     }
 
     public void browseReservations() {
-        Customer customer = new Customer(spaces, reservations);
-        if (customer.browse().isEmpty()) {
+        if (Customer.browse().isEmpty()) {
             System.out.println("Unfortunately there are no free spaces");
         } else {
-            System.out.println("The list of available coworking spaces:" + customer.browse());
+            System.out.println("The list of available coworking spaces:" + Customer.browse());
         }
     }
 
-    public List<Reservation> reserve(String name, String startDate, String endDate, int id) {
+    private static List<Reservation> reserve(String name, String startDate, String endDate, int id) {
         for (Space space : spaces) {
             if (space.getId() == id) {
                 reservations.add(new Reservation(name, startDate, endDate, id));
@@ -39,8 +38,7 @@ public class Customer {
     }
 
     public void makeReservation() {
-        Customer customer = new Customer(spaces, reservations);
-        if (customer.browse().isEmpty()) {
+        if (Customer.browse().isEmpty()) {
             System.out.println("Unfortunately there are no free spaces");
         } else {
             System.out.println("Enter the name of the reservation:");
@@ -54,8 +52,8 @@ public class Customer {
             boolean reserved = false;
             for (Space space : spaces) {
                 if (space.getId() == id && space.availability()) {
-                    reservations = customer.reserve(name, startDate, endDate, id);
-                    spaces = customer.availabilitySpaceChanging(id);
+                    reservations = Customer.reserve(name, startDate, endDate, id);
+                    spaces = Customer.availabilitySpaceChanging(id);
                     System.out.println("Reservation made!");
                     reserved = true;
                     break;
@@ -67,7 +65,7 @@ public class Customer {
         }
     }
 
-    public String view() {
+    private static String view() {
         StringBuilder str = new StringBuilder();
         for (Reservation reservation : reservations) {
             str.append(reservation.toString()).append("\n");
@@ -79,12 +77,11 @@ public class Customer {
         if (reservations.isEmpty()) {
             System.out.println("The list of reservations is empty!");
         } else {
-            Customer customer = new Customer(spaces, reservations);
-            System.out.println("The list of your reservations:\n" + customer.view());
+            System.out.println("The list of your reservations:\n" + Customer.view());
         }
     }
 
-    public void cancel(int id) {
+    private static void cancel(int id) {
         reservations.removeIf(reservation -> reservation.getId() == id);
     }
 
@@ -92,14 +89,13 @@ public class Customer {
         if (reservations.isEmpty()) {
             System.out.println("The list of reservations is empty!");
         } else {
-            Customer customer = new Customer(spaces, reservations);
             System.out.println("Enter the ID of the reservation you want to delete:");
             int id = sc.nextInt();
             boolean idForRemoving = false;
             for (Reservation reservation : reservations) {
                 if (reservation.getId() == id) {
-                    customer.cancel(id);
-                    spaces = customer.availabilitySpaceChanging(id);
+                    Customer.cancel(id);
+                    spaces = Customer.availabilitySpaceChanging(id);
                     System.out.println("Reservation removed successfully!");
                     idForRemoving = true;
                     break;
@@ -111,7 +107,7 @@ public class Customer {
         }
     }
 
-    public List<Space> availabilitySpaceChanging(int id) {
+    private static List<Space> availabilitySpaceChanging(int id) {
         for (Space space : spaces) {
             if (space.getId() == id) {
                 space.changeAvailability();
