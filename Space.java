@@ -24,6 +24,6 @@ public class Space {
     }
 
     public String toString() {
-        return "ID: " + id + "; Type: " + type + "; Price: " + price + "; Availability: " + availability;
+        return "ID: " + id + " Type: " + type + " Price: " + price + " Availability: " + availability + "\n";
     }
 }

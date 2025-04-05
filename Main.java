@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        String fileWithCoworkingSpaces = "CoworkingSpaces.txt";
+        String fileWithReservations = "Reservations.txt";
         List<Space> spaces = new ArrayList<>();
         List<Reservation> reservations = new ArrayList<>();
-        spaces.add(new Space(123, "open", 39.99, true));
-        spaces.add(new Space(231, "closed", 69.99, false));
-        spaces.add(new Space(321, "open", 29.99, true));
-        spaces.add(new Space(412, "open", 34.99, false));
-
+        ReadingAndWriting readingAndWriting = new ReadingAndWriting(spaces, reservations);
+        readingAndWriting.readCoworkingSpaces(fileWithCoworkingSpaces);
+        readingAndWriting.readReservations(fileWithReservations);
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome!");
         int option;
@@ -63,6 +63,33 @@ public class Main {
                                 admin.updateSpace();
                                 break;
                             case 5:
+                                System.out.println("Do you want to save changes?\n1-Yes\n2-No");
+                                int saveSpace;
+                                while (true) {
+                                    try {
+                                        saveSpace = sc.nextInt();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Please enter a valid option!");
+                                        sc.nextLine();
+                                    }
+                                }
+                                boolean save = true;
+                                while (save) {
+                                    switch (saveSpace) {
+                                        case 1:
+                                            readingAndWriting.writeSpaces(fileWithCoworkingSpaces);
+                                            readingAndWriting.writeSpaces(fileWithReservations);
+                                            save = false;
+                                            System.out.println("All changes were saved!");
+                                            break;
+                                        case 2:
+                                            save = false;
+                                            break;
+                                        default:
+                                            System.out.println("Please enter a valid option!");
+                                    }
+                                }
                                 System.out.println("You were redirected to the main menu!");
                                 break;
                             default:
@@ -105,6 +132,33 @@ public class Main {
                                 customer.cancelReservation();
                                 break;
                             case 5:
+                                System.out.println("Do you want to save changes?\n1-Yes\n2-No");
+                                int saveReservation;
+                                while (true) {
+                                    try {
+                                        saveReservation = sc.nextInt();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Please enter a valid option!");
+                                        sc.nextLine();
+                                    }
+                                }
+                                boolean save = true;
+                                while (save) {
+                                    switch (saveReservation) {
+                                        case 1:
+                                            readingAndWriting.writeReservations(fileWithReservations);
+                                            readingAndWriting.writeSpaces(fileWithReservations);
+                                            save = false;
+                                            System.out.println("All changes were saved!");
+                                            break;
+                                        case 2:
+                                            save = false;
+                                            break;
+                                        default:
+                                            System.out.println("Please enter a valid option!");
+                                    }
+                                }
                                 System.out.println("You were redirected to the main menu!");
                                 break;
                             default:

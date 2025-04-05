@@ -16,6 +16,6 @@ public class Reservation {
     }
 
     public String toString() {
-        return "Name: " + name + "; Start Date: " + startDate + "; End Date: " + endDate + "; ID of the coworking space: " + id;
+        return "Name: " + name + " Start_Date: " + startDate + " End_Date: " + endDate + " Coworking_space_ID " + id + "\n";
     }
 }

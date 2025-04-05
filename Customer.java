@@ -24,7 +24,7 @@ public class Customer {
         if (Customer.browse().isEmpty()) {
             System.out.println("Unfortunately there are no free spaces");
         } else {
-            System.out.println("The list of available coworking spaces:" + Customer.browse());
+            System.out.println("The list of available coworking spaces:\n" + Customer.browse());
         }
     }
 

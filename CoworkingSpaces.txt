@@ -1,0 +1,4 @@
+ID: 321 Type: closed Price: 69.99 Availability: false
+ID: 412 Type: open Price: 34.99 Availability: false
+ID: 125 Type: open Price: 12.23 Availability: true
+ID: 152 Type: closed Price: 29.99 Availability: true
