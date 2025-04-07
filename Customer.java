@@ -60,7 +60,7 @@ public class Customer {
                 }
             }
             if (!reserved) {
-                System.out.println("Coworking space with this ID does not exist!");
+                System.out.println("Coworking space with this ID does not exist or the space is occupied!");
             }
         }
     }

@@ -1,8 +1,10 @@
-public class Reservation {
-    private String name;
-    private String startDate;
-    private String endDate;
-    private int id;
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
+    private final String name;
+    private final String startDate;
+    private final String endDate;
+    private final int id;
 
     Reservation(String name, String startDate, String endDate, int id) {
         this.name = name;

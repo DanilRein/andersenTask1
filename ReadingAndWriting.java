@@ -1,8 +1,9 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReadingAndWriting {
+public class ReadingAndWriting implements Serializable {
     private List<Space> spaces;
     private List<Reservation> reservations;
 
@@ -11,7 +12,7 @@ public class ReadingAndWriting {
         this.reservations = reservations;
     }
 
-    public void readCoworkingSpaces(String SpacesFileName) {
+    public void readSpaces(String SpacesFileName) {
         try (FileReader fileReader = new FileReader(SpacesFileName);
              BufferedReader br = new BufferedReader(fileReader)) {
             while (br.ready()) {
@@ -43,35 +44,24 @@ public class ReadingAndWriting {
     }
 
     public void readReservations(String ReservationsFileName) {
-        try (FileReader fileReader = new FileReader(ReservationsFileName);
-             BufferedReader br = new BufferedReader(fileReader)) {
-            while (br.ready()) {
-                String line = br.readLine();
-                if (line.isEmpty())
-                    continue;
-                String[] tokens = line.split(" ");
-                reservations.add(new Reservation(tokens[1], tokens[3],
-                        tokens[5], Integer.parseInt(tokens[7])));
-            }
+        try (ObjectInputStream readReserve = new ObjectInputStream(new BufferedInputStream(new FileInputStream(ReservationsFileName)))) {
+            List<Reservation> load = (ArrayList<Reservation>) readReserve.readObject();
+            reservations.addAll(load);
+        } catch (EOFException e) {
+            System.out.println("NOTE: File with reservations is empty");
+            reservations = new ArrayList<>();
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found: " + e.getMessage());
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void writeReservations(String ReservationsFileName) {
-        try (FileWriter fileWriter = new FileWriter(ReservationsFileName);
-             BufferedWriter br = new BufferedWriter(new BufferedWriter(fileWriter))) {
-            for (Reservation reservation : reservations) {
-                br.write(reservation.toString());
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found: " + e.getMessage());
+        try (ObjectOutputStream writeReserve = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(ReservationsFileName)))) {
+            writeReserve.writeObject(reservations);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("File not found: " + e.getMessage());
         }
     }
-
-
 }
