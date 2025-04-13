@@ -1,17 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        Map<String, String> customers = new HashMap<>();
+        customers.put("Daniil Radevich", "DR");
+        customers.put("Andrei Khaustov", "AK");
+        customers.put("Maria Ivanova", "MI");
         String fileWithCoworkingSpaces = "CoworkingSpaces.txt";
-        String fileWithReservations = "Reservations";
         List<Space> spaces = new ArrayList<>();
         List<Reservation> reservations = new ArrayList<>();
         ReadingAndWriting readingAndWriting = new ReadingAndWriting(spaces, reservations);
         readingAndWriting.readSpaces(fileWithCoworkingSpaces);
-        readingAndWriting.readReservations(fileWithReservations);
-        Scanner sc = new Scanner(System.in);
         System.out.println("Welcome!");
         int option;
         do {
@@ -76,7 +77,9 @@ public class Main {
                     break;
                 case 2:
                     System.out.println("Welcome to Customer menu");
-                    Customer customer = new Customer(spaces, reservations);
+                    Customer customer = new Customer(spaces, reservations, customers);
+                    String fileWithReservations = "Reservations" + customers.get(customer.chooseCustomer());
+                    readingAndWriting.readReservations(fileWithReservations);
                     int customerOption;
                     do {
                         System.out.println("Choose an option:");
@@ -112,6 +115,7 @@ public class Main {
                                 readingAndWriting.writeSpaces(fileWithCoworkingSpaces);
                                 break;
                             case 5:
+                                reservations.clear();
                                 System.out.println("You were redirected to the main menu!");
                                 break;
                             default:

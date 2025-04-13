@@ -1,14 +1,19 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Customer {
     Scanner sc = new Scanner(System.in);
     private static List<Space> spaces;
     private static List<Reservation> reservations;
+    private static Map<String, String> customers = new HashMap<>();
 
-    Customer(List<Space> spaceList, List<Reservation> reservationList) {
+
+    Customer(List<Space> spaceList, List<Reservation> reservationList, Map<String, String> customers) {
         Customer.spaces = spaceList;
         Customer.reservations = reservationList;
+        Customer.customers = customers;
     }
 
     private static String browse() {
@@ -114,5 +119,24 @@ public class Customer {
             }
         }
         return spaces;
+    }
+
+    public String chooseCustomer() {
+        System.out.println("Customer List:");
+        for (String key : customers.keySet()) {
+            System.out.println(key);
+        }
+        System.out.println("Enter your customer name");
+        String customerName;
+        while (true) {
+            customerName = sc.nextLine();
+            if (customers.containsKey(customerName)) {
+                break;
+            } else {
+                System.out.println("Customer not found, please try again");
+                sc.nextLine();
+            }
+        }
+        return customerName;
     }
 }
