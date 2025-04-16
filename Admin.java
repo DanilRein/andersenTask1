@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Admin {
@@ -95,11 +96,12 @@ public class Admin {
     }
 
     public void displaySpaces() {
-        if (spaces.isEmpty()) {
-            System.out.println("The list of coworking spaces is empty!");
-        } else {
-            System.out.println(this.display());
-        }
+        Optional.ofNullable(spaces)
+                .filter(spaces -> !spaces.isEmpty())
+                .ifPresentOrElse(
+                        _ -> System.out.println(this.display()),
+                        () -> System.out.println("The list of coworking spaces is empty!")
+                );
     }
 
 }

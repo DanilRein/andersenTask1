@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,12 @@ public class Customer {
     }
 
     public void viewReservation() {
+        Optional.ofNullable(reservations)
+                .filter(reservations -> !reservations.isEmpty())
+                .ifPresentOrElse(
+                        _ -> System.out.println("The list of your reservations:\n" + this.view()),
+                        () -> System.out.println("The list of reservations is empty!")
+                );
         if (reservations.isEmpty()) {
             System.out.println("The list of reservations is empty!");
         } else {
