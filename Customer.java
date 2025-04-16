@@ -1,40 +1,39 @@
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Customer {
     Scanner sc = new Scanner(System.in);
-    private static List<Space> spaces;
-    private static List<Reservation> reservations;
-    private static Map<String, String> customers = new HashMap<>();
+    private List<Space> spaces;
+    private List<Reservation> reservations;
+    private Map<String, String> customers;
 
 
     Customer(List<Space> spaceList, List<Reservation> reservationList, Map<String, String> customers) {
-        Customer.spaces = spaceList;
-        Customer.reservations = reservationList;
-        Customer.customers = customers;
+        this.spaces = spaceList;
+        this.reservations = reservationList;
+        this.customers = customers;
     }
 
-    private static String browse() {
-        StringBuilder str = new StringBuilder();
-        for (Space space : spaces) {
-            if (space.availability())
-                str.append(space).append("\n");
-        }
-        return str.toString();
+    private String browse() {
+        String freeSpaces = this.spaces.stream()
+                .filter(Space::availability)
+                .map(Space::toString)
+                .collect(Collectors.joining("\n"));
+        return freeSpaces;
     }
 
     public void browseReservations() {
-        if (Customer.browse().isEmpty()) {
+        if (this.browse().isEmpty()) {
             System.out.println("Unfortunately there are no free spaces");
         } else {
-            System.out.println("The list of available coworking spaces:\n" + Customer.browse());
+            System.out.println("The list of available coworking spaces:\n" + this.browse());
         }
     }
 
-    private static List<Reservation> reserve(String name, String startDate, String endDate, int id) {
-        for (Space space : spaces) {
+    private List<Reservation> reserve(String name, String startDate, String endDate, int id) {
+        for (Space space : this.spaces) {
             if (space.getId() == id) {
                 reservations.add(new Reservation(name, startDate, endDate, id));
             }
@@ -43,7 +42,7 @@ public class Customer {
     }
 
     public void makeReservation() {
-        if (Customer.browse().isEmpty()) {
+        if (this.browse().isEmpty()) {
             System.out.println("Unfortunately there are no free spaces");
         } else {
             System.out.println("Enter the name of the reservation:");
@@ -57,8 +56,8 @@ public class Customer {
             boolean reserved = false;
             for (Space space : spaces) {
                 if (space.getId() == id && space.availability()) {
-                    reservations = Customer.reserve(name, startDate, endDate, id);
-                    spaces = Customer.availabilitySpaceChanging(id);
+                    reservations = this.reserve(name, startDate, endDate, id);
+                    spaces = this.availabilitySpaceChanging(id);
                     System.out.println("Reservation made!");
                     reserved = true;
                     break;
@@ -70,9 +69,9 @@ public class Customer {
         }
     }
 
-    private static String view() {
+    private String view() {
         StringBuilder str = new StringBuilder();
-        for (Reservation reservation : reservations) {
+        for (Reservation reservation : this.reservations) {
             str.append(reservation.toString()).append("\n");
         }
         return str.toString();
@@ -82,12 +81,12 @@ public class Customer {
         if (reservations.isEmpty()) {
             System.out.println("The list of reservations is empty!");
         } else {
-            System.out.println("The list of your reservations:\n" + Customer.view());
+            System.out.println("The list of your reservations:\n" + this.view());
         }
     }
 
-    private static void cancel(int id) {
-        reservations.removeIf(reservation -> reservation.getId() == id);
+    private void cancel(int id) {
+        this.reservations.removeIf(reservation -> reservation.getId() == id);
     }
 
     public void cancelReservation() {
@@ -99,8 +98,8 @@ public class Customer {
             boolean idForRemoving = false;
             for (Reservation reservation : reservations) {
                 if (reservation.getId() == id) {
-                    Customer.cancel(id);
-                    spaces = Customer.availabilitySpaceChanging(id);
+                    this.cancel(id);
+                    spaces = this.availabilitySpaceChanging(id);
                     System.out.println("Reservation removed successfully!");
                     idForRemoving = true;
                     break;
@@ -112,8 +111,8 @@ public class Customer {
         }
     }
 
-    private static List<Space> availabilitySpaceChanging(int id) {
-        for (Space space : spaces) {
+    private List<Space> availabilitySpaceChanging(int id) {
+        for (Space space : this.spaces) {
             if (space.getId() == id) {
                 space.changeAvailability();
             }

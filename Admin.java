@@ -3,34 +3,34 @@ import java.util.Scanner;
 
 public class Admin {
     Scanner sc = new Scanner(System.in);
-    private static List<Space> spaces;
+    private List<Space> spaces;
 
     Admin(List<Space> spaces) {
-        Admin.spaces = spaces;
+        this.spaces = spaces;
     }
 
 
-    public static List<Space> add(int id, String type, double price, boolean availability) {
-        Admin.spaces.add(new Space(id, type, price, availability));
+    public List<Space> add(int id, String type, double price, boolean availability) {
+        this.spaces.add(new Space(id, type, price, availability));
         return spaces;
     }
 
-    public static List<Space> remove(int id) {
-        spaces.removeIf(s -> s.getId() == id);
+    public List<Space> remove(int id) {
+        this.spaces.removeIf(s -> s.getId() == id);
         return spaces;
     }
 
-    public static String display() {
+    public String display() {
         StringBuilder str = new StringBuilder();
-        for (Space s : spaces) {
+        for (Space s : this.spaces) {
             str.append(s.toString()).append("\n");
         }
         return "The list of all coworking spaces:\n" + str;
     }
 
-    public static List<Space> update(int id, String type, double price, boolean availability) {
-        spaces.removeIf(s -> s.getId() == id);
-        spaces.add(new Space(id, type, price, availability));
+    public List<Space> update(int id, String type, double price, boolean availability) {
+        this.spaces.removeIf(s -> s.getId() == id);
+        this.spaces.add(new Space(id, type, price, availability));
         return spaces;
     }
 
@@ -43,7 +43,7 @@ public class Admin {
         double price = sc.nextDouble();
         System.out.println("Enter the availability of the coworking space:");
         boolean availability = sc.nextBoolean();
-        spaces = Admin.add(id, type, price, availability);
+        spaces = this.add(id, type, price, availability);
         System.out.println("The coworking space added successfully!");
     }
 
@@ -56,7 +56,7 @@ public class Admin {
             boolean removingSpace = false;
             for (Space space : spaces) {
                 if (space.getId() == id) {
-                    spaces = Admin.remove(id);
+                    spaces = this.remove(id);
                     System.out.println("Coworking space was removed!");
                     removingSpace = true;
                     break;
@@ -82,7 +82,7 @@ public class Admin {
                     double newPrice = sc.nextDouble();
                     System.out.println("Enter a new availability for the space:");
                     boolean newAvailability = sc.nextBoolean();
-                    spaces = Admin.update(id, newType, newPrice, newAvailability);
+                    spaces = this.update(id, newType, newPrice, newAvailability);
                     System.out.println("The space updated successfully!");
                     updatingSpace = true;
                     break;
@@ -98,7 +98,7 @@ public class Admin {
         if (spaces.isEmpty()) {
             System.out.println("The list of coworking spaces is empty!");
         } else {
-            System.out.println(Admin.display());
+            System.out.println(this.display());
         }
     }
 
